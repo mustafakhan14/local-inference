@@ -25,6 +25,10 @@ make update-models   # pull models later
 | What | URL |
 |------|-----|
 | **Stack Hub** (status, agents, models) | http://127.0.0.1:3080/hub |
+| **Downloads** (progress + resume) | http://127.0.0.1:3080/hub/#downloads |
+| **Agent terminal** | http://127.0.0.1:3080/hub/#terminal |
+| **Hermes chat** | http://127.0.0.1:3080/hub/agents/hermes |
+| **OpenClaw chat** | http://127.0.0.1:3080/hub/agents/openclaw |
 | **Chat** (Open WebUI) | http://127.0.0.1:3080 |
 | **oMLX admin** (load MLX models) | http://127.0.0.1:3080/omlx/admin |
 | Ollama API | http://127.0.0.1:11434 |
@@ -60,6 +64,8 @@ Cursor / OpenCode / OpenClaw / Hermes
 
 ```bash
 make verify          # health check
+make resume-downloads # resume Qwen 35B + Fable5
+make one-shot-agents # hub + terminal + downloads
 make update-models   # sync catalog models (resumable)
 make restart         # restart Docker stack
 make logs            # tail logs

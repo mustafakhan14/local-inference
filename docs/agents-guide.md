@@ -1,39 +1,37 @@
 # Which agent tool when?
 
-Quick guide for the tools in your stack. **Start at http://127.0.0.1:3080/hub** for live status and launch commands.
+**Start at http://127.0.0.1:3080/hub** — tabs for Downloads, Status, Agents, Terminal.
 
 | Tool | What it is | Use when | Launch |
 |------|------------|----------|--------|
-| **Cursor Agent** | IDE agent with tools + MCP | Daily coding in repos, like this chat | Settings → local model + Agent mode |
-| **OpenCode** | Terminal coding agent | Multi-file edits, shell commands, no GUI | `~/.config/local-inference/agents/opencode.sh` |
-| **OpenClaw** | Personal assistant agent | Tasks, messaging, automation across apps | `~/.config/local-inference/agents/openclaw.sh` |
-| **Hermes** | General-purpose agent CLI | Open-ended agent tasks via Anthropic API shape | `~/.config/local-inference/agents/hermes.sh` |
-| **Claude Code (local)** | Anthropic's coding agent UX | Familiar Claude Code workflow, fully local | `~/.config/local-inference/claude-local.sh` |
-| **Open WebUI** | Browser chat + RAG | General chat, Work/Personal knowledge collections | http://127.0.0.1:3080 |
+| **Cursor Agent** | IDE agent with tools + MCP | Daily coding in repos | Settings → local model + Agent mode |
+| **OpenCode** | Terminal coding agent | Multi-file edits, shell | Terminal tab → copy `opencode.sh` |
+| **OpenClaw** | Personal assistant | Tasks, automation | [OpenClaw Chat](/hub/agents/openclaw) or Terminal |
+| **Hermes** | General agent CLI | Open-ended agent tasks | [Hermes Chat](/hub/agents/hermes) or Terminal |
+| **Open WebUI** | Browser chat + RAG | General chat, Knowledge Collections | http://127.0.0.1:3080 |
 
-## Decision tree
+## Chat vs Terminal
 
-```
-Need to edit code in a repo?
-  └─ Yes → Cursor Agent or OpenCode
-  └─ No → Need documents?
-       └─ Yes → Open WebUI Knowledge Collection (Work / Personal)
-       └─ No → General chat → Open WebUI
-```
+| Mode | Best for |
+|------|----------|
+| **Hermes / OpenClaw Chat** (`/hub/agents/*`) | Quick questions, planning, lightweight assistant |
+| **Terminal** (`/hub/#terminal`) | Full agent sessions with tools, shell, file access |
+| **Open WebUI** | Document RAG, general chat |
 
-## oMLX one-liners (from terminal)
+OpenClaw Chat is a **simplified oMLX-backed assistant**, not the full OpenClaw runtime. For full OpenClaw, use the Terminal tab.
+
+## oMLX one-liners
 
 ```bash
-omlx launch opencode    # pick model in TUI
+omlx launch opencode
 omlx launch openclaw --tools-profile coding
-omlx launch claude      # Claude Code → local
-omlx launch hermes      # if installed
+omlx launch hermes
 ```
 
-All use API key `mkapikey` and http://127.0.0.1:8000.
+Or: http://127.0.0.1:3080/omlx/admin → Applications
 
-Or launch from **oMLX Applications** tab: http://127.0.0.1:3080/omlx/admin
+## Downloads
 
-## Stack Hub
+Track Qwen 35B and Fable5 progress: http://127.0.0.1:3080/hub/#downloads
 
-Live status, model download progress, agent commands: http://127.0.0.1:3080/hub
+Resume from CLI: `make resume-downloads`

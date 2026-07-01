@@ -36,11 +36,13 @@ services:
       - MODELS_DIR=/models
       - CATALOG_PATH=/app/catalog.yaml
       - HOME_CONFIG=/home-config
+      - LOG_DIR=/logs
       - PUBLIC_BASE_URL=http://127.0.0.1:3080
     volumes:
       - ${HOME}/models:/models:ro
       - ../models/catalog.yaml:/app/catalog.yaml:ro
-      - ${HOME}/.config/local-inference:/home-config:ro
+      - ${HOME}/.config/local-inference:/home-config:rw
+      - ${HOME}/Library/Logs/local-inference:/logs:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:

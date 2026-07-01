@@ -95,3 +95,49 @@ catalog_omlx_hf_models() {
     grep 'omlx_hf:' "$catalog" | sed 's/.*omlx_hf: //' | tr -d ' ' || true
   fi
 }
+
+dir_size_kb() {
+  local path="$1"
+  [[ -e "$path" ]] || { echo 0; return; }
+  du -sk "$path" 2>/dev/null | awk '{print $1}'
+}
+
+dir_size_gb() {
+  local kb
+  kb="$(dir_size_kb "$1")"
+  awk -v k="$kb" 'BEGIN { printf "%.2f", k / 1024 / 1024 }'
+}
+
+is_size_complete() {
+  local path="$1" expected_gb="$2"
+  [[ -n "$expected_gb" && "$expected_gb" != "0" ]] || return 1
+  local kb min_kb
+  kb="$(dir_size_kb "$path")"
+  min_kb="$(awk -v g="$expected_gb" 'BEGIN { printf "%d", g * 1024 * 1024 * 0.9 }')"
+  [[ "$kb" -ge "$min_kb" ]]
+}
+
+ollama_has_model() {
+  local model="$1"
+  ollama list 2>/dev/null | tail -n +2 | awk '{print $1}' | grep -qx "${model%%:*}" || \
+    ollama list 2>/dev/null | tail -n +2 | awk '{print $1}' | grep -qx "$model"
+}
+
+ensure_hf_cli() {
+  if command_exists hf; then
+    echo hf
+  elif command_exists huggingface-cli; then
+    echo huggingface-cli
+  else
+    brew install hf 2>/dev/null || brew install huggingface-cli 2>/dev/null || true
+    if command_exists hf; then
+      echo hf
+    elif command_exists huggingface-cli; then
+      echo huggingface-cli
+    fi
+  fi
+}
+
+clean_hf_locks() {
+  find "${HOME}/models" -path '*/.cache/huggingface/*.lock' -delete 2>/dev/null || true
+}
