@@ -1,0 +1,20 @@
+---
+description: Enforce local-only AI for sensitive project work
+alwaysApply: true
+---
+
+# Local privacy mode
+
+This project uses **local inference only**. All prompts and code context must stay on-device.
+
+## Rules
+
+- Do not suggest sending code, credentials, or internal documents to cloud APIs.
+- Prefer the configured local model via oMLX (`http://127.0.0.1:8000/v1`).
+- When reviewing security-sensitive changes, remind the user that Cursor Tab autocomplete is still cloud-hosted.
+
+## Stack reference
+
+- Hub: http://127.0.0.1:3080/hub
+- Chat: http://127.0.0.1:3080
+- Document RAG: Open WebUI Knowledge Collections (Work / Personal)

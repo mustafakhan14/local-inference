@@ -1,0 +1,17 @@
+{
+	auto_https off
+}
+
+:3080 {
+	route /hub* {
+		uri strip_prefix /hub
+		reverse_proxy stack-hub:8780
+	}
+
+	route /omlx* {
+		uri strip_prefix /omlx
+		reverse_proxy host.docker.internal:8000
+	}
+
+	reverse_proxy open-webui:8080
+}

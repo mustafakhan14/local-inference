@@ -1,0 +1,7 @@
+# Generated secrets and state — do not commit
+omlx.env
+state.env
+agents.env
+claude-local.sh
+cursor-settings.md
+anythingllm/

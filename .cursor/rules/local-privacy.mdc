@@ -1,0 +1,22 @@
+---
+description: Enforce local-only AI for sensitive project work
+alwaysApply: true
+---
+
+# Local privacy mode
+
+This project uses **local inference only**. All prompts and code context must stay on-device.
+
+## Rules
+
+- Do not suggest sending code, credentials, or internal documents to cloud APIs.
+- Prefer the configured local model via oMLX (`http://127.0.0.1:8000/v1`, API key `mkapikey`).
+- When reviewing security-sensitive changes, remind the user that Cursor Tab autocomplete is still cloud-hosted.
+
+## Stack reference
+
+- Hub: http://127.0.0.1:3080/hub
+- Chat: http://127.0.0.1:3080
+- Primary model: `qwen3.5:35b-a3b-coding-nvfp4`
+- Fast model: `qwen2.5-coder:14b`
+- Fable-style agent: `Qwopus3.5-4B-Coder-Fable5-v1-MLX-4bit` in oMLX

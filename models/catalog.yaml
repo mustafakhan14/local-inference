@@ -1,0 +1,61 @@
+# Model catalog for M4 Pro 48GB — edit and run: make update-models
+#
+# backends: omlx | ollama | both
+# optional: true skips pull if PULL_OPTIONAL=0
+
+models:
+  - id: primary
+    role: coding + reasoning
+    name: Qwen3.5 35B-A3B (coding)
+    ollama: qwen3.5:35b-a3b-coding-nvfp4
+    omlx_hf: mlx-community/Qwen3.5-35B-A3B-Instruct-4bit
+    size_gb: 20
+    backends: both
+    optional: false
+
+  - id: fast
+    role: quick edits
+    name: Qwen2.5 Coder 14B
+    ollama: qwen2.5-coder:14b
+    size_gb: 9
+    backends: ollama
+    optional: false
+
+  - id: embeddings
+    role: RAG embeddings
+    name: Nomic Embed Text
+    ollama: nomic-embed-text
+    size_gb: 0.3
+    backends: ollama
+    optional: false
+
+  - id: fable-agent
+    role: Fable-5 trace agent (fast, tool-use)
+    name: Qwopus 3.5 4B Coder Fable5 MLX 4bit
+    omlx_hf: shuhulx/Qwopus3.5-4B-Coder-Fable5-v1-MLX-4bit
+    size_gb: 2.5
+    backends: omlx
+    optional: true
+
+  - id: fable-local
+    role: Fable 5-style reasoning (open weights)
+    name: Qwable 3.6 27B
+    ollama: null
+    omlx_hf: Mia-AiLab/Qwable-3.6-27b
+    note: "Fine-tuned Qwen for Fable-style reasoning; convert to GGUF or use via HF"
+    size_gb: 17
+    backends: omlx
+    optional: true
+
+  - id: vision
+    role: screenshots and diagrams
+    name: Qwen2.5 VL 7B
+    ollama: qwen2.5vl:7b
+    size_gb: 5
+    backends: ollama
+    optional: true
+
+defaults:
+  primary_ollama: qwen3.5:35b-a3b-coding-nvfp4
+  fast_ollama: qwen2.5-coder:14b
+  embedding_ollama: nomic-embed-text

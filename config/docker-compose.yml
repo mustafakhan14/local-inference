@@ -1,0 +1,51 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - open-webui-data:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URLS=http://host.docker.internal:8000/v1
+      - OPENAI_API_KEYS=${OMLX_API_KEY:-mkapikey}
+      - ENABLE_OLLAMA_API=true
+      - OLLAMA_BASE_URLS=http://host.docker.internal:11434
+      - WEBUI_AUTH=true
+      - ENABLE_SIGNUP=false
+      - DEFAULT_USER_ROLE=user
+      - WEBUI_NAME=Local AI
+      - ENABLE_COMMUNITY_SHARING=false
+      - RAG_EMBEDDING_ENGINE=ollama
+      - RAG_EMBEDDING_MODEL=nomic-embed-text
+      - RAG_OLLAMA_BASE_URL=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  gateway:
+    build: ../stack-hub
+    container_name: local-inference-gateway
+    ports:
+      - "127.0.0.1:3080:3080"
+    environment:
+      - STACK_HUB_PORT=8780
+      - OMLX_HOST=host.docker.internal
+      - OMLX_PORT=8000
+      - OLLAMA_HOST=host.docker.internal
+      - OLLAMA_PORT=11434
+      - OMLX_API_KEY=${OMLX_API_KEY:-mkapikey}
+      - MODELS_DIR=/models
+      - CATALOG_PATH=/app/catalog.yaml
+      - HOME_CONFIG=/home-config
+      - PUBLIC_BASE_URL=http://127.0.0.1:3080
+    volumes:
+      - ${HOME}/models:/models:ro
+      - ../models/catalog.yaml:/app/catalog.yaml:ro
+      - ${HOME}/.config/local-inference:/home-config:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - open-webui
+    restart: unless-stopped
+
+volumes:
+  open-webui-data:
