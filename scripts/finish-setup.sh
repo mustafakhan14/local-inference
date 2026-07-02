@@ -26,10 +26,8 @@ bash "${REPO_ROOT}/scripts/configure-omlx.sh"
 bash "${REPO_ROOT}/scripts/setup-mcp.sh"
 bash "${REPO_ROOT}/scripts/install-agents.sh"
 
-# Agent terminal + download watcher
+bash "${REPO_ROOT}/scripts/install-host-scripts.sh"
 bash "${REPO_ROOT}/scripts/install-agent-terminal.sh" || warn "ttyd install failed"
-install_launchd_plist "com.local-inference.download-watcher" 2>/dev/null || \
-  launchctl kickstart -k "gui/$(id -u)/com.local-inference.download-watcher" 2>/dev/null || true
 
 # Retire broken :8765 dashboard launchd agent
 launchctl bootout "gui/$(id -u)/com.local-inference.dashboard" 2>/dev/null || true

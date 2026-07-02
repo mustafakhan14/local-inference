@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Polls download-request.json and runs resume-download.sh on the host
 set -euo pipefail
-source "$(dirname "$0")/lib/common.sh"
+
+BIN_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${BIN_DIR}/lib/common.sh"
 
 REQUEST_FILE="${CONFIG_DIR}/download-request.json"
-SCRIPT="${REPO_ROOT}/scripts/resume-download.sh"
+SCRIPT="${BIN_DIR}/resume-download.sh"
 
 ensure_dirs
 log "Download watcher started (polls ${REQUEST_FILE})"

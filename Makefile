@@ -2,14 +2,14 @@ REPO_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 export REPO_ROOT
 COMPOSE := docker compose -f $(REPO_ROOT)/config/docker-compose.yml
 
-.PHONY: bootstrap verify update-models resume-downloads start stop restart logs start-webui stop-webui restart-omlx help one-shot one-shot-agents dashboard-dev finish
+.PHONY: bootstrap verify update-models resume-downloads start stop restart logs help one-shot one-shot-agents install-host-scripts test-hub dashboard-dev finish
 
 help:
 	@echo "Local Inference Stack — targets:"
-	@echo "  make bootstrap         Full one-shot setup"
-	@echo "  make one-shot          Complete setup + model downloads + stack hub"
-	@echo "  make one-shot-agents   Hub UI + terminal + resume downloads"
-	@echo "  make resume-downloads  Resume Qwen 35B + Fable5 downloads"
+	@echo "  make one-shot-agents       Hub UI + terminal + resume downloads"
+	@echo "  make test-hub              Playwright E2E tests for /hub"
+	@echo "  make install-host-scripts  Fix download watcher (TCC-safe)"
+	@echo "  make resume-downloads      Resume Qwen 35B + Fable5 downloads"
 	@echo "  make verify            Health check all services"
 	@echo "  make update-models     Pull models from catalog"
 	@echo "  make start             Start all services"
@@ -29,6 +29,15 @@ one-shot-agents:
 	@chmod +x $(REPO_ROOT)/scripts/*.sh 2>/dev/null || true
 	@$(REPO_ROOT)/scripts/one-shot-agents.sh
 
+install-host-scripts:
+	@chmod +x $(REPO_ROOT)/scripts/*.sh 2>/dev/null || true
+	@$(REPO_ROOT)/scripts/install-host-scripts.sh
+
+test-hub:
+	@cd $(REPO_ROOT) && npm install --silent 2>/dev/null || npm install
+	@cd $(REPO_ROOT) && npx playwright install chromium 2>/dev/null || true
+	@cd $(REPO_ROOT) && npx playwright test --config tests/e2e/playwright.config.ts
+
 resume-downloads:
 	@chmod +x $(REPO_ROOT)/scripts/*.sh 2>/dev/null || true
 	@$(REPO_ROOT)/scripts/resume-download.sh all
@@ -39,7 +48,7 @@ verify:
 update-models:
 	@$(REPO_ROOT)/scripts/pull-models.sh
 
-start: start-ollama start-omlx start-webui start-host-services
+start: start-ollama start-omlx install-host-scripts start-webui start-host-services
 	@echo "Stack started. Hub: http://127.0.0.1:3080/hub"
 
 start-host-services:

@@ -1,0 +1,110 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 20px;
+  line-height: 1.5;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+h1 { font-size: 1.3rem; margin-bottom: 4px; }
+.sub { color: #8b949e; font-size: 0.85rem; margin-bottom: 16px; }
+.nav { margin-bottom: 16px; }
+.nav a { margin-right: 14px; color: #58a6ff; text-decoration: none; font-size: 0.88rem; }
+.nav a:hover { text-decoration: underline; }
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.tab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  background: #161b22;
+  color: #e6edf3;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-decoration: none;
+  display: inline-block;
+}
+.tab.active { background: #388bfd; border-color: #388bfd; color: #fff; }
+.panel { display: none; }
+.panel.active { display: block; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px; }
+.card h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8b949e; margin-bottom: 8px; }
+.ok { color: #3fb950; }
+.bad { color: #f85149; }
+.warn { color: #d29922; }
+ul { list-style: none; font-size: 0.85rem; }
+li { padding: 2px 0; }
+code { background: #21262d; padding: 1px 5px; border-radius: 4px; font-size: 0.78rem; word-break: break-all; }
+.btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #238636;
+  border: 1px solid #2ea043;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.btn:hover { background: #2ea043; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.secondary { background: #21262d; border-color: #30363d; }
+.dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 16px; }
+.dl-card { background: #161b22; border: 2px solid #30363d; border-radius: 10px; padding: 16px; }
+.dl-card.downloading { border-color: #388bfd; }
+.dl-card.complete { border-color: #3fb950; }
+.dl-card h3 { font-size: 0.95rem; margin-bottom: 6px; }
+.badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: #21262d; display: inline-block; margin-bottom: 8px; }
+.badge.downloading { background: #1f3d5c; color: #58a6ff; }
+.badge.complete { background: #1a3d2a; color: #3fb950; }
+.badge.paused, .badge.missing { background: #3d2e1a; color: #d29922; }
+.bar { background: #21262d; border-radius: 6px; height: 10px; margin: 8px 0; overflow: hidden; }
+.bar-fill { background: linear-gradient(90deg, #388bfd, #58a6ff); height: 100%; transition: width 0.5s; }
+.logbox {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 10px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  color: #8b949e;
+  max-height: 120px;
+  overflow: auto;
+  margin-top: 12px;
+}
+.logbox .line { display: block; white-space: pre-wrap; word-break: break-all; }
+iframe.term { width: 100%; height: 480px; border: 1px solid #30363d; border-radius: 8px; background: #000; }
+.agent-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #238636;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1000;
+}
+.toast.show { opacity: 1; }
+.watcher-warn { color: #d29922; font-size: 0.8rem; margin-bottom: 8px; }
+.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 120px); }
+.chat-log { flex: 1; overflow: auto; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #161b22; }
+.msg { margin-bottom: 10px; }
+.msg.user { color: #58a6ff; }
+.msg.assistant { color: #e6edf3; }
+.chat-input { display: flex; gap: 8px; }
+textarea {
+  flex: 1;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  padding: 8px;
+  resize: vertical;
+  min-height: 60px;
+}

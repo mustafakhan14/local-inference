@@ -3,19 +3,35 @@
 
 set -euo pipefail
 
-if [[ -n "${BASH_SOURCE[0]:-}" ]]; then
+CONFIG_DIR="${HOME}/.config/local-inference"
+LOG_DIR="${HOME}/Library/Logs/local-inference"
+STATE_FILE="${CONFIG_DIR}/state.env"
+
+if [[ -f "${CONFIG_DIR}/repo.env" ]]; then
+  # shellcheck disable=SC1091
+  source "${CONFIG_DIR}/repo.env"
+fi
+
+if [[ -n "${BASH_SOURCE[0]:-}" ]] && [[ -z "${REPO_ROOT:-}" ]]; then
   _script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  REPO_ROOT="$(cd "${_script_dir}/../.." && pwd)"
+  if [[ "$_script_dir" == *"/.config/local-inference/bin/lib" ]]; then
+    REPO_ROOT="${LOCAL_INFERENCE_REPO:?Set LOCAL_INFERENCE_REPO in repo.env}"
+  else
+    REPO_ROOT="$(cd "${_script_dir}/../.." && pwd)"
+  fi
 elif [[ -n "${REPO_ROOT:-}" ]]; then
   : # preserve REPO_ROOT from Makefile/caller
 else
   REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 fi
-CONFIG_DIR="${HOME}/.config/local-inference"
-LOG_DIR="${HOME}/Library/Logs/local-inference"
-STATE_FILE="${CONFIG_DIR}/state.env"
 
 export REPO_ROOT CONFIG_DIR LOG_DIR STATE_FILE
+
+# launchd agents get a minimal PATH — include Homebrew for hf, ollama, jq, etc.
+ensure_path() {
+  export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
+}
+ensure_path
 
 log()  { printf '[local-inference] %s\n' "$*"; }
 warn() { printf '[local-inference] WARN: %s\n' "$*" >&2; }
@@ -124,18 +140,23 @@ ollama_has_model() {
 }
 
 ensure_hf_cli() {
-  if command_exists hf; then
-    echo hf
-  elif command_exists huggingface-cli; then
-    echo huggingface-cli
-  else
-    brew install hf 2>/dev/null || brew install huggingface-cli 2>/dev/null || true
-    if command_exists hf; then
-      echo hf
-    elif command_exists huggingface-cli; then
-      echo huggingface-cli
+  local bin
+  for bin in hf huggingface-cli; do
+    if command_exists "$bin"; then
+      command -v "$bin"
+      return 0
     fi
+  done
+  if command_exists brew; then
+    brew install hf 2>/dev/null || brew install huggingface-cli 2>/dev/null || true
+    for bin in hf huggingface-cli; do
+      if command_exists "$bin"; then
+        command -v "$bin"
+        return 0
+      fi
+    done
   fi
+  return 1
 }
 
 clean_hf_locks() {

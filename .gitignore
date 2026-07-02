@@ -5,3 +5,7 @@ agents.env
 claude-local.sh
 cursor-settings.md
 anythingllm/
+node_modules/
+package-lock.json
+test-results/
+playwright-report/

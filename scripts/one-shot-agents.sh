@@ -8,9 +8,8 @@ log "=== One-shot: Hub agents + downloads ==="
 ensure_dirs
 chmod +x "${REPO_ROOT}/scripts/"*.sh
 
+bash "${REPO_ROOT}/scripts/install-host-scripts.sh"
 bash "${REPO_ROOT}/scripts/install-agent-terminal.sh"
-install_launchd_plist "com.local-inference.download-watcher"
-launchctl kickstart -k "gui/$(id -u)/com.local-inference.download-watcher" 2>/dev/null || true
 
 export OMLX_API_KEY="${OMLX_API_KEY:-mkapikey}"
 if docker info >/dev/null 2>&1; then

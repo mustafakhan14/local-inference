@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # Resumable targeted model downloads for hub / CLI
 set -euo pipefail
-source "$(dirname "$0")/lib/common.sh"
+
+_script_dir="$(cd "$(dirname "$0")" && pwd)"
+if [[ -f "${_script_dir}/lib/common.sh" ]]; then
+  source "${_script_dir}/lib/common.sh"
+else
+  source "$(dirname "$0")/lib/common.sh"
+fi
 
 TARGET="${1:-all}"
 LOG_FILE="${LOG_DIR}/pull-models.log"
@@ -37,12 +43,12 @@ pull_mlx_hf() {
     log "MLX model complete: $label ($target)"
     return 0
   fi
-  local hf_cmd
-  hf_cmd="$(ensure_hf_cli)" || die "Install hf: brew install hf"
+  local hf_bin
+  hf_bin="$(ensure_hf_cli)" || die "Install hf: brew install hf"
   clean_hf_locks
   mkdir -p "$target"
   log "Downloading MLX model: $label ($hf_id) — resumable"
-  $hf_cmd download "$hf_id" --local-dir "$target" --resume-download
+  "$hf_bin" download "$hf_id" --local-dir "$target"
 }
 
 run_target() {
